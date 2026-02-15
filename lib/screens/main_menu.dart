@@ -208,10 +208,10 @@ class _MainMenuState extends State<MainMenu> {
           return SingleChildScrollView(
             child: ConstrainedBox(
               constraints: BoxConstraints(
-                minHeight: constraints.maxHeight, // Занимает всю высоту карточки
+                minHeight: constraints.maxHeight,
               ),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center, // Центрируем текст
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     description,

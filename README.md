@@ -11,7 +11,7 @@
 - **Accessibility**: visually impaired mode with adjustable text size, color schemes, and option to hide images
 
 
-# installation and running
+## installation and running
 1. make sure [flutter sdk](https://flutter.dev/docs/get-started/install) is installed
 2. clone the repository
 ```bash
