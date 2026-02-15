@@ -22,3 +22,7 @@ cd nn_finance_app
 ```bash
 flutter pub get
 ```
+4. run the app on your device or emulator
+```bash
+flutter run
+```
