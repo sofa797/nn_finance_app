@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'help_screen.dart';
 import 'main_menu.dart';
-import 'story_screen.dart';
 import 'map_screen.dart';
 
 class MainShell extends StatefulWidget {
@@ -22,7 +21,7 @@ class _MainShellState extends State<MainShell> {
 
   final List<Widget> _pages = const [
     MainMenu(),
-    StoryScreen(),
+    HelpScreen(),
     MapScreen(),
   ];
 
@@ -111,7 +110,7 @@ class _MainShellState extends State<MainShell> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.menu_book, key: _historyKey),
-            label: "История",
+            label: "Справка",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.map, key: _mapKey),

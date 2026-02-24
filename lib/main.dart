@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'screens/main_menu.dart';
-import 'screens/story_screen.dart';
 import 'settings/app_settings.dart';
 import 'settings/story_progress.dart';
 import 'screens/splash_screen.dart';
@@ -29,32 +27,61 @@ class NNFinanceApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final settings = context.watch<AppSettings>();
 
+    const beigePrimary = Color(0xFFAC876D);
+
+    final bool isDark =
+        settings.colorScheme == ColorSchemeOption.dark;
+
+    final baseColor = beigePrimary;
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Финансовый Нижний',
+
       theme: ThemeData(
-        brightness: settings.colorScheme == ColorSchemeOption.dark
-            ? Brightness.dark
-            : Brightness.light,
+        useMaterial3: true,
+
+        brightness: isDark ? Brightness.dark : Brightness.light,
+
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: baseColor,
+          brightness: isDark ? Brightness.dark : Brightness.light,
+        ).copyWith(
+          primary: baseColor,
+        ),
+
         scaffoldBackgroundColor: settings.backgroundColor,
-        primaryColor: settings.buttonColor,
+
         appBarTheme: AppBarTheme(
           backgroundColor: settings.backgroundColor,
           foregroundColor: settings.textColor,
           elevation: 0,
         ),
+
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          selectedItemColor: baseColor,
+          unselectedItemColor:
+              isDark ? Colors.grey.shade400 : Colors.grey.shade600,
+        ),
+
+        iconTheme: IconThemeData(
+          color: baseColor,
+        ),
+
         textTheme: TextTheme(
           bodyLarge: TextStyle(color: settings.textColor),
           bodyMedium: TextStyle(color: settings.textColor),
           titleLarge: TextStyle(color: settings.textColor),
         ),
+
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: settings.buttonColor,
+            backgroundColor: baseColor,
             foregroundColor: settings.textColor,
           ),
         ),
       ),
+
       builder: (context, child) {
         final mediaQuery = MediaQuery.of(context);
         return MediaQuery(
@@ -64,6 +91,7 @@ class NNFinanceApp extends StatelessWidget {
           child: child!,
         );
       },
+
       home: const SplashScreen(),
     );
   }

@@ -1,0 +1,31 @@
+class Story {
+  final String id;
+  final String title;
+  final String? coverImage;
+  final List<StoryLine> lines;
+
+  Story({
+    required this.id,
+    required this.title,
+    this.coverImage,
+    required this.lines,
+  });
+}
+
+class StoryLine {
+  final String text;
+  final String? character;
+  final String? image;
+  final bool isMainHero;
+  final bool isNarration;
+  final String? backgroundImage;
+
+  StoryLine({
+    required this.text,
+    this.character,
+    this.image,
+    this.isMainHero = false,
+    this.isNarration = false,
+    this.backgroundImage,
+  });
+}

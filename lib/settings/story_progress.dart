@@ -1,17 +1,25 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 class StoryProgress extends ChangeNotifier {
-  int index = 0;
+  final Map<String, int> _progress = {};
 
-  void next(int storyLength) {
-    if (index < storyLength) {
-      index++;
+  int getIndex(String storyId) => _progress[storyId] ?? 0;
+
+  void next(String storyId, int length) {
+    if (_progress[storyId] == null) _progress[storyId] = 0;
+
+    if (_progress[storyId]! < length) {
+      _progress[storyId] = _progress[storyId]! + 1;
       notifyListeners();
     }
   }
 
-  void reset() {
-    index = 0;
+  void reset(String storyId) {
+    _progress[storyId] = 0;
     notifyListeners();
+  }
+
+  bool isCompleted(String storyId, int length) {
+    return getIndex(storyId) >= length;
   }
 }
