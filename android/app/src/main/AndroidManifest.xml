@@ -9,7 +9,8 @@
         android:name=".MainApplication"
         android:label="nn_finance_app"
         android:icon="@mipmap/ic_launcher"
-        android:hardwareAccelerated="true">
+        android:hardwareAccelerated="true"
+        android:usesCleartextTraffic="true">
 
         <activity
             android:name=".MainActivity"

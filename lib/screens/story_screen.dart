@@ -5,6 +5,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 import '../settings/story_progress.dart';
 import '../settings/app_settings.dart';
 import '../models/story_model.dart';
+import 'map_screen.dart';
 
 class StoryScreen extends StatefulWidget {
   final Story story;
@@ -19,24 +20,40 @@ class _StoryScreenState extends State<StoryScreen> {
   late FlutterTts _tts;
   bool _isAudioMode = false;
   bool _isDisposed = false;
+  bool _isSpeaking = false;
+  bool _isOnMapPage = false;
+
+  late PageController _pageController;
 
   @override
   void initState() {
     super.initState();
+    _pageController = PageController();
     _initTts();
+  }
+
+  void _goToStoryPage() {
+    _pageController.animateToPage(
+      0,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
+    );
   }
 
   Future<void> _initTts() async {
     _tts = FlutterTts();
-    await _tts.setSpeechRate(0.5);
+    await _tts.setLanguage("ru-RU");
+
+    var voices = await _tts.getVoices;
+    for (var v in voices) debugPrint("TTS Voice: $v");
+
+    await _tts.setVoice({"name": "ru-ru-x-rue-local", "locale": "ru-RU"});
     await _tts.setVolume(1.0);
-    await _tts.setPitch(1.0);
     _tts.awaitSpeakCompletion(true);
 
     _tts.setCompletionHandler(() {
-      if (_isAudioMode && !_isDisposed) {
-        _playNextLine();
-      }
+      _isSpeaking = false;
+      if (_isAudioMode && !_isDisposed) _playNextLine();
     });
   }
 
@@ -44,8 +61,28 @@ class _StoryScreenState extends State<StoryScreen> {
   void dispose() {
     _isDisposed = true;
     _tts.stop();
-    //_tts.dispose();
+    _pageController.dispose();
     super.dispose();
+  }
+
+  Future<void> _speakLine(StoryLine line) async {
+    if (_isSpeaking) return;
+
+    _isSpeaking = true;
+    await _tts.stop();
+
+    if (line.isNarration) {
+      await _tts.setSpeechRate(0.38);
+      await _tts.setPitch(0.95);
+    } else if (line.isMainHero) {
+      await _tts.setSpeechRate(0.42);
+      await _tts.setPitch(1.1);
+    } else {
+      await _tts.setSpeechRate(0.44);
+      await _tts.setPitch(1.05);
+    }
+
+    await _tts.speak("… ${line.text}");
   }
 
   void _playNextLine() async {
@@ -57,26 +94,19 @@ class _StoryScreenState extends State<StoryScreen> {
       progress.next(widget.story.id, lines.length);
       if (progress.getIndex(widget.story.id) < lines.length) {
         final current = lines[progress.getIndex(widget.story.id)];
-        await _tts.stop();
-        await _tts.speak(current.text);
+        await _speakLine(current);
       }
     }
   }
 
-  void _toggleAudioMode(StoryProgress progress) {
-    setState(() {
-      _isAudioMode = !_isAudioMode;
-    });
+  void _toggleAudioMode(StoryProgress progress) async {
+    setState(() => _isAudioMode = !_isAudioMode);
 
     final lines = widget.story.lines;
     final index = progress.getIndex(widget.story.id);
 
-    if (_isAudioMode && index < lines.length) {
-      _tts.stop();
-      _tts.speak(lines[index].text);
-    } else {
-      _tts.stop();
-    }
+    if (_isAudioMode && index < lines.length) await _speakLine(lines[index]);
+    else await _tts.stop();
   }
 
   @override
@@ -87,44 +117,78 @@ class _StoryScreenState extends State<StoryScreen> {
     final isEnd = progress.isCompleted(widget.story.id, lines.length);
 
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: true,
-        backgroundColor: settings.backgroundColor,
-        foregroundColor: settings.textColor,
-        title: null,
-        actions: [
-          IconButton(
-            icon: Icon(
-              _isAudioMode ? Icons.headphones : Icons.menu_book,
-              color: settings.textColor,
+      body: SafeArea(
+        top: false,
+        child: Stack(
+          children: [
+            PageView(
+              controller: _pageController,
+              physics: _isOnMapPage
+                  ? const NeverScrollableScrollPhysics()
+                  : const PageScrollPhysics(),
+              onPageChanged: (index) {
+                setState(() => _isOnMapPage = index == 1);
+              },
+              children: [
+                isEnd
+                    ? _buildEndStory(context, settings, progress)
+                    : _buildStoryContent(
+                        context,
+                        lines[progress.getIndex(widget.story.id)],
+                        settings,
+                        progress,
+                      ),
+
+                MapScreen(onBackToStory: _goToStoryPage),
+              ],
             ),
-            tooltip: _isAudioMode ? 'Режим слушать' : 'Режим читать',
-            onPressed: () => _toggleAudioMode(progress),
-          ),
-        ],
+
+            if (!_isOnMapPage)
+              Positioned(
+                top: MediaQuery.of(context).padding.top + 12,
+                left: 12,
+                right: 12,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Material(
+                      color: Colors.white,
+                      shape: const CircleBorder(),
+                      elevation: 4,
+                      child: IconButton(
+                        icon: const Icon(Icons.close, color: Colors.black),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ),
+
+                    Material(
+                      color: Colors.white,
+                      shape: const CircleBorder(),
+                      elevation: 4,
+                      child: IconButton(
+                        icon: Icon(
+                          _isAudioMode ? Icons.headphones : Icons.menu_book,
+                          color: Colors.black,
+                        ),
+                        onPressed: () => _toggleAudioMode(progress),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+          ],
+        ),
       ),
-      body: isEnd
-          ? _buildEndStory(context, settings, progress)
-          : _buildStoryContent(
-              context,
-              lines[progress.getIndex(widget.story.id)],
-              settings,
-              progress,
-            ),
     );
   }
 
   Widget _buildStoryContent(BuildContext context, StoryLine current,
       AppSettings settings, StoryProgress progress) {
-    if (_isAudioMode && !current.isNarration) {
-      _tts.speak(current.text);
-    }
-
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () {
+      onTap: () async {
         if (!_isAudioMode) {
-          _tts.stop();
+          await _tts.stop();
           progress.next(widget.story.id, widget.story.lines.length);
         }
       },
@@ -194,7 +258,9 @@ class _StoryScreenState extends State<StoryScreen> {
 
   Widget _buildNarrationBubble(
       BuildContext context, StoryLine current, AppSettings settings) {
-    final textScale = MediaQuery.of(context).textScaleFactor * settings.textScale;
+    final textScale =
+        MediaQuery.of(context).textScaleFactor * settings.textScale;
+
     return Center(
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 40),
@@ -219,16 +285,19 @@ class _StoryScreenState extends State<StoryScreen> {
 
   Widget _buildCharacterBubble(
       BuildContext context, StoryLine current, AppSettings settings) {
-    final textScale = MediaQuery.of(context).textScaleFactor * settings.textScale;
+    final textScale =
+        MediaQuery.of(context).textScaleFactor * settings.textScale;
     final screenWidth = MediaQuery.of(context).size.width;
-    final alignment = current.isMainHero ? Alignment.bottomRight : Alignment.bottomLeft;
+    final alignment =
+        current.isMainHero ? Alignment.bottomRight : Alignment.bottomLeft;
     final marginLeft = current.isMainHero ? screenWidth * 0.2 : 20.0;
     final marginRight = current.isMainHero ? 20.0 : screenWidth * 0.2;
 
     return Align(
       alignment: alignment,
       child: Container(
-        margin: EdgeInsets.only(left: marginLeft, right: marginRight, bottom: 80),
+        margin:
+            EdgeInsets.only(left: marginLeft, right: marginRight, bottom: 80),
         child: ConstrainedBox(
           constraints: BoxConstraints(maxWidth: screenWidth * 0.65),
           child: IntrinsicWidth(
@@ -237,7 +306,8 @@ class _StoryScreenState extends State<StoryScreen> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: const Color(0xFFD2B48C), width: 2),
+                border:
+                    Border.all(color: const Color(0xFFD2B48C), width: 2),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.15),
@@ -253,8 +323,8 @@ class _StoryScreenState extends State<StoryScreen> {
                   if (current.character != null)
                     Container(
                       margin: const EdgeInsets.only(bottom: 8),
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
                         color: const Color(0xFFD2B48C),
                         borderRadius: BorderRadius.circular(20),
@@ -291,19 +361,16 @@ class _StoryScreenState extends State<StoryScreen> {
       children: [
         Positioned.fill(
           child: settings.imagesEnabled && widget.story.coverImage != null
-              ? Image.asset(
-                  widget.story.coverImage!,
-                  fit: BoxFit.cover,
-                )
+              ? Image.asset(widget.story.coverImage!, fit: BoxFit.cover)
               : Container(color: settings.backgroundColor),
         ),
         Positioned.fill(
-          child: Container(color: Colors.black.withOpacity(0.65)),
-        ),
+            child: Container(color: Colors.black.withOpacity(0.65))),
         Center(
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 40),
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
             decoration: BoxDecoration(
               color: Colors.white.withOpacity(0.95),
               borderRadius: BorderRadius.circular(24),
@@ -321,43 +388,11 @@ class _StoryScreenState extends State<StoryScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                Text(
-                  'Вы можете пройти историю заново или вернуться в меню',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 18 * settings.textScale,
-                    color: settings.textColor.withOpacity(0.8),
-                    height: 1.4,
-                  ),
-                ),
-                const SizedBox(height: 32),
                 ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFD2B48C),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 40, vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
                   onPressed: () {
-                    // Безопасный сброс прогресса после построения кадра
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      progress.reset(widget.story.id);
-
-                      if (_isAudioMode && widget.story.lines.isNotEmpty) {
-                        _playNextLine();
-                      }
-                    });
+                    progress.reset(widget.story.id);
                   },
-                  child: Text(
-                    'Начать заново',
-                    style: TextStyle(
-                      fontSize: 18 * settings.textScale,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
+                  child: const Text('Начать заново'),
                 ),
               ],
             ),

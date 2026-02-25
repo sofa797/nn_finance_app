@@ -13,7 +13,13 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => AppSettings()),
         ChangeNotifierProvider(create: (_) => StoryProgress()),
-        ChangeNotifierProvider(create: (_) => UserLocationService()),
+        ChangeNotifierProvider(
+          create: (_) {
+            final service = UserLocationService();
+            service.startTracking();
+            return service;
+          },
+        ),
       ],
       child: const NNFinanceApp(),
     ),
@@ -36,7 +42,6 @@ class NNFinanceApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Финансовый Нижний',
 
       theme: ThemeData(
         useMaterial3: true,

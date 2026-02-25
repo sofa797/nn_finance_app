@@ -7,7 +7,9 @@ import '../models/story_location.dart';
 import '../services/user_location_service.dart';
 
 class MapScreen extends StatefulWidget {
-  const MapScreen({super.key});
+  final VoidCallback? onBackToStory;
+
+  const MapScreen({super.key, this.onBackToStory});
 
   @override
   State<MapScreen> createState() => _MapScreenState();
@@ -15,6 +17,8 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   final Completer<YandexMapController> _controllerCompleter = Completer();
+  YandexMapController? _mapController;
+
   bool _isCameraMoved = false;
 
   final List<StoryLocation> locations = const [
@@ -32,7 +36,40 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<UserLocationService>().startTracking();
+
+    final locationService = context.read<UserLocationService>();
+    locationService.startTracking();
+
+    locationService.addListener(_onLocationUpdate);
+  }
+
+  void _onLocationUpdate() async {
+    final locationService = context.read<UserLocationService>();
+
+    if (_mapController == null) return;
+    if (_isCameraMoved) return;
+    if (locationService.currentPoint == null) return;
+
+    _isCameraMoved = true;
+
+    await _mapController!.moveCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: locationService.currentPoint!,
+          zoom: 15,
+        ),
+      ),
+      animation: const MapAnimation(
+        type: MapAnimationType.smooth,
+        duration: 1.5,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    context.read<UserLocationService>().removeListener(_onLocationUpdate);
+    super.dispose();
   }
 
   @override
@@ -40,72 +77,105 @@ class _MapScreenState extends State<MapScreen> {
     final locationService = context.watch<UserLocationService>();
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Карта маршрута',
-    style: TextStyle(fontSize: 24))),
-      body: YandexMap(
-        onMapCreated: (controller) async {
-          if (!_controllerCompleter.isCompleted) {
-            _controllerCompleter.complete(controller);
-          }
+      body: Stack(
+        children: [
 
-          if (!_isCameraMoved && locationService.currentPoint != null) {
-            _isCameraMoved = true;
+          YandexMap(
+            onMapCreated: (controller) async {
+              _mapController = controller;
 
-            await controller.moveCamera(
-              CameraUpdate.newCameraPosition(
-                CameraPosition(
-                  target: locationService.currentPoint!,
-                  zoom: 15,
-                ),
-              ),
-              animation: const MapAnimation(
-                type: MapAnimationType.smooth,
-                duration: 1.5,
-              ),
-            );
-          }
-        },
-        mapObjects: [
-          ...locations.map(
-            (loc) => PlacemarkMapObject(
-              mapId: MapObjectId('story_${loc.storyIndex}'),
-              point: Point(latitude: loc.lat, longitude: loc.lon),
-              opacity: 0.8,
-              icon: PlacemarkIcon.single(
-                PlacemarkIconStyle(
-                  image: BitmapDescriptor.fromAssetImage(
-                      'assets/images/map_marker.png'),
-                  scale: 0.3,
-                ),
-              ),
-              onTap: (mapObject, point) {
-                showDialog(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                    title: Text(loc.title),
-                    content: const Text(
-                        'Эта точка связана с текущей главой истории.'),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: const Text('Закрыть'),
-                      ),
-                    ],
+              final locationService =
+                  context.read<UserLocationService>();
+
+              if (locationService.lastCameraPoint != null &&
+                  locationService.lastZoom != null) {
+
+                await controller.moveCamera(
+                  CameraUpdate.newCameraPosition(
+                    CameraPosition(
+                      target: locationService.lastCameraPoint!,
+                      zoom: locationService.lastZoom!,
+                    ),
                   ),
                 );
-              },
-            ),
+              } else if (locationService.currentPoint != null) {
+
+                await controller.moveCamera(
+                  CameraUpdate.newCameraPosition(
+                    CameraPosition(
+                      target: locationService.currentPoint!,
+                      zoom: 15,
+                    ),
+                  ),
+                );
+
+                locationService.saveCameraState(
+                  locationService.currentPoint!,
+                  15,
+                );
+              }
+            },
+
+            mapObjects: [
+              ...locations.map(
+                (loc) => PlacemarkMapObject(
+                  mapId: MapObjectId('story_${loc.storyIndex}'),
+                  point: Point(latitude: loc.lat, longitude: loc.lon),
+                  opacity: 0.8,
+                  icon: PlacemarkIcon.single(
+                    PlacemarkIconStyle(
+                      image: BitmapDescriptor.fromAssetImage(
+                          'assets/images/map_marker.png'),
+                      scale: 0.3,
+                    ),
+                  ),
+                  onTap: (mapObject, point) {
+                    showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                        title: Text(loc.title),
+                        content: const Text(
+                            'Эта точка связана с текущей главой истории.'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text('Закрыть'),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+
+              if (locationService.currentPoint != null)
+                PlacemarkMapObject(
+                  mapId: const MapObjectId('user_position'),
+                  point: locationService.currentPoint!,
+                  icon: PlacemarkIcon.single(
+                    PlacemarkIconStyle(
+                      image: BitmapDescriptor.fromAssetImage(
+                          'assets/images/map_user.png'),
+                      scale: 0.3,
+                    ),
+                  ),
+                ),
+            ],
           ),
 
-          if (locationService.currentPoint != null)
-            PlacemarkMapObject(
-              mapId: const MapObjectId('user_position'),
-              point: locationService.currentPoint!,
-              icon: PlacemarkIcon.single(
-                PlacemarkIconStyle(
-                  image: BitmapDescriptor.fromAssetImage(
-                      'assets/images/map_user.png'),
-                  scale: 0.3,
+          if (widget.onBackToStory != null)
+            Positioned(
+              top: MediaQuery.of(context).padding.top,
+              left: 12,
+              child: SafeArea(
+                child: Material(
+                  color: Colors.white,
+                  shape: const CircleBorder(),
+                  elevation: 4,
+                  child: IconButton(
+                    icon: const Icon(Icons.arrow_back, color: Colors.black),
+                    onPressed: widget.onBackToStory,
+                  ),
                 ),
               ),
             ),
