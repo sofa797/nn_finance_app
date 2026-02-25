@@ -28,62 +28,74 @@ class HelpScreen extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: settings.backgroundColor,
-          foregroundColor: settings.textColor,
-          bottom: const TabBar(
-            tabs: [
-              Tab(text: 'Архитектура'),
-              Tab(text: 'Персонажи'),
+        body: SafeArea(
+          top: false,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Container(
+                  color: settings.backgroundColor,
+                  child: TabBar(
+                    labelColor: settings.textColor,
+                    unselectedLabelColor: settings.textColor.withOpacity(0.6),
+                    tabs: const [
+                      Tab(text: 'Архитектура'),
+                      Tab(text: 'Персонажи'),
+                    ],
+                  ),
+                ),
+              ),
+              Expanded(
+                child: TabBarView(
+                  children: [
+                    PageView.builder(
+                      controller: PageController(viewportFraction: 0.7),
+                      itemCount: architectureCards.length,
+                      itemBuilder: (context, index) {
+                        final card = architectureCards[index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                          child: Center(
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.65,
+                              child: AspectRatio(
+                                aspectRatio: 3.5 / 5,
+                                child: FlipCard(
+                                  direction: FlipDirection.HORIZONTAL,
+                                  front: _buildCardFront(card['image']!),
+                                  back: _buildCardBackCentered(card['description']!, settings),
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+
+                    GridView.builder(
+                      padding: const EdgeInsets.all(16),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 0.7,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                      ),
+                      itemCount: characterCards.length,
+                      itemBuilder: (context, index) {
+                        final char = characterCards[index];
+                        return FlipCard(
+                          direction: FlipDirection.HORIZONTAL,
+                          front: _buildCharacterFront(char['image']!, char['name']!),
+                          back: _buildCardBackCentered(char['description']!, settings),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
-          title: const Text('Справка'),
-        ),
-        body: TabBarView(
-          children: [
-            PageView.builder(
-                controller: PageController(viewportFraction: 0.7),
-                itemCount: architectureCards.length,
-                itemBuilder: (context, index) {
-                    final card = architectureCards[index];
-                    return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-                    child: Center(
-                        child: SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.65,
-                        child: AspectRatio(
-                            aspectRatio: 3.5 / 5,
-                            child: FlipCard(
-                            direction: FlipDirection.HORIZONTAL,
-                            front: _buildCardFront(card['image']!),
-                            back: _buildCardBackCentered(card['description']!, settings),
-                            ),
-                        ),
-                        ),
-                    ),
-                    );
-                },
-                ),
-
-            GridView.builder(
-              padding: const EdgeInsets.all(16),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.7,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-              ),
-              itemCount: characterCards.length,
-              itemBuilder: (context, index) {
-                final char = characterCards[index];
-                return FlipCard(
-                  direction: FlipDirection.HORIZONTAL,
-                  front: _buildCharacterFront(char['image']!, char['name']!),
-                  back: _buildCardBackCentered(char['description']!, settings),
-                );
-              },
-            ),
-          ],
         ),
       ),
     );
