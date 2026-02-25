@@ -33,7 +33,7 @@ class HelpScreen extends StatelessWidget {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 20),
+                padding: const EdgeInsets.only(top: 40),
                 child: Container(
                   color: settings.backgroundColor,
                   child: TabBar(
