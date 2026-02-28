@@ -226,6 +226,29 @@ class _StoryScreenState extends State<StoryScreen> {
             ),
           ),
           if (settings.imagesEnabled && current.image != null)
+          Align(
+            alignment: current.isMainHero
+            ? Alignment.bottomRight
+            : Alignment.bottomLeft,
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 500),
+            child: Transform.translate(
+              key: ValueKey('char_${current.image}_${current.hashCode}'),
+              offset: current.isMainHero
+              ? const Offset(60, 50)
+              : const Offset(-60, 50),
+              child: Image.asset(
+                current.image!,
+                
+                height: MediaQuery.of(context).size.height * 0.88, // 85% экрана
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          ),
+          
+/*
             Positioned(
               bottom: 0,
               left: 0,
@@ -239,6 +262,7 @@ class _StoryScreenState extends State<StoryScreen> {
                       : const Offset(-60, 0),
                   child: Image.asset(
                     current.image!,
+                    height: MediaQuery.of(context).size.height * 0.65,
                     fit: BoxFit.contain,
                     alignment: current.isMainHero
                         ? Alignment.bottomRight
@@ -247,13 +271,17 @@ class _StoryScreenState extends State<StoryScreen> {
                 ),
               ),
             ),
+*/
+
           if (current.isNarration)
             Center(child: _buildNarrationBubble(context, current, settings)),
           if (!current.isNarration)
             _buildCharacterBubble(context, current, settings),
         ],
       ),
+      
     );
+    
   }
 
   Widget _buildNarrationBubble(
@@ -281,6 +309,8 @@ class _StoryScreenState extends State<StoryScreen> {
         ),
       ),
     );
+
+    
   }
 
   Widget _buildCharacterBubble(
