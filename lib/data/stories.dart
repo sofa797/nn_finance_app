@@ -366,7 +366,7 @@ final List<Story> stories = [
     StoryLine(
       text: '[Головокружительное ощущение падения. Звуки современности исчезают. Возникают новые: конские копыта, скрип телег, крики торговцев на старорусском наречии]',
       isNarration: true,
-      backgroundImage: 'assets/images/black.jpg',
+      backgroundImage: 'assets/images/white_flash.png',
     ),
     
 

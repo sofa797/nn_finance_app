@@ -36,6 +36,10 @@ dependencies:
   flip_card: ^0.5.0
   tutorial_coach_mark: ^1.2.11
   shared_preferences: ^2.2.2
+  url_launcher: ^6.3.2
+  webview_flutter: ^4.13.1
+  sliding_up_panel: ^2.0.0
+  just_audio: ^0.9.36
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -68,7 +72,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
-    - assets/images/main_logo.png
+    - assets/audio/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
