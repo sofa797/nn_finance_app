@@ -226,7 +226,7 @@ class _PodcastPanelState extends State<PodcastPanel> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16), // убрали крестик здесь
+                  const SizedBox(height: 16),
                 ],
               ),
             ),
@@ -276,12 +276,11 @@ class _PodcastPanelState extends State<PodcastPanel> {
                     style: const TextStyle(fontWeight: FontWeight.w500),
                   ),
                 ),
-                // кнопка закрытия панели здесь
                 IconButton(
                   icon: const Icon(Icons.close),
                   onPressed: () {
-                    _player.stop(); // останавливаем аудио
-                    widget.onClose(); // закрываем панель
+                    _player.stop();
+                    widget.onClose();
                   },
                   constraints: const BoxConstraints(),
                   padding: const EdgeInsets.all(8),
@@ -340,18 +339,14 @@ class HelpScreen extends StatefulWidget {
   const HelpScreen({super.key});
 
   static final List<Map<String, String>> architectureCards = const [
-    {
-      'image': 'assets/images/logo.jpg',
-      'description':
-          'Предлагаем Вам поближе познакомиться с финансовой архитектурой Нижнего Новгорода. Листайте карточки и узнайте, почему город называли «карманом России» — центром торговли и капитала XIX века.'
-    },
-    {
-      'image': 'assets/images/fair_cards.png',
-      'description':
-          'Нижегородская ярмарка — крупнейший торговый центр России XIX века. После переноса из Макарьева в 1817 году она стала главным местом встречи купцов Европы и Азии. Здесь заключались многомиллионные сделки, формировались цены на зерно, чай и ткани. Ярмарка сыграла ключевую роль в развитии банковского дела, торговли и превращении Нижнего Новгорода в финансовую столицу страны.'
-    },
-    // остальные карточки
-  ];
+    { 'image': 'assets/images/logo.jpg', 'description': 'Предлагаем Вам поближе познакомиться с финансовой архитектурой Нижнего Новгорода. Листайте карточки и узнайте, почему город называли «карманом России» — центром торговли и капитала XIX века.', },
+    { 'image': 'assets/images/fair_cards.png', 'description': 'Нижегородская ярмарка — крупнейший торговый центр России XIX века. После переноса из Макарьева в 1817 году она стала главным местом встречи купцов Европы и Азии. Здесь заключались многомиллионные сделки, формировались цены на зерно, чай и ткани. Ярмарка сыграла ключевую роль в развитии банковского дела, торговли и превращении Нижнего Новгорода в финансовую столицу страны.', },
+    { 'image': 'assets/images/old_fair_spassky_cathedral.jpg', 'description': 'Староярмарочный Спасский собор построен в 1822 году как главный храм Нижегородской ярмарки. Он стал духовным центром крупнейшего торгового пространства России, объединяя купцов со всей страны. Собор символизировал связь торговли, веры и деловой этики, подчёркивая значение ярмарки не только как экономического, но и культурного центра города.', },
+    { 'image': 'assets/images/warehouse.png', 'description': 'Пакгауз — складское здание ярмарки XIX века, где купцы хранили товары для продажи и транспортировки. Он обеспечивал надёжное хранение зерна, тканей и других ценных грузов, упрощал логистику и ускорял торговлю. Пакгауз символизировал организованность и профессионализм купеческого сообщества Нижнего Новгорода.', },
+    { 'image': 'assets/images/nizny_novgorod_stock_exchange.jpg', 'description': 'Нижегородская биржа, построенная в 1896 году, была центром торговли ценными бумагами, зерном и промтоварами. Здесь купцы и банкиры заключали сделки, формировали курсы и кредиты. Биржа символизировала финансовую зрелость города и способствовала превращению Нижнего Новгорода в «карман России».', },
+    { 'image': 'assets/images/salt_exchange.png', 'description': 'Соляная биржа, образованная в середине XIX века, служила местом оборота и контроля поставок соли — важнейшего товара для России. Здесь регулировались цены, заключались оптовые сделки и хранились сведения о поставках. Биржа подчёркивала стратегическую роль Нижнего Новгорода в снабжении страны ключевыми товарами и поддержке торговли.', },
+    { 'image': 'assets/images/blinovsky_passage.png', 'description': 'Блиновский пассаж, построенный в 1910-х годах, был коммерческим зданием с магазинами и офисами для купцов. Здесь сосредоточились торговля, банки и склады, обеспечивая комфорт и безопасность бизнеса. Пассаж стал символом модернизации городской торговли.', },
+    ];
 
   static final List<Map<String, String>> characterCards = const [
     {'image': 'assets/images/alex.png', 'name': 'Александр Бугров', 'description': 'Главный герой истории'},
@@ -425,7 +420,6 @@ class _HelpScreenState extends State<HelpScreen> {
                   Expanded(
                     child: TabBarView(
                       children: [
-                        // Architecture
                         PageView.builder(
                           controller: PageController(viewportFraction: 0.7),
                           itemCount: HelpScreen.architectureCards.length,
@@ -449,7 +443,6 @@ class _HelpScreenState extends State<HelpScreen> {
                             );
                           },
                         ),
-                        // Characters
                         GridView.builder(
                           padding: const EdgeInsets.all(16),
                           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -468,8 +461,6 @@ class _HelpScreenState extends State<HelpScreen> {
                             );
                           },
                         ),
-                        // Articles
-                        // Articles
                         ListView.builder(
                           padding: const EdgeInsets.all(16),
                           itemCount: HelpScreen.articleCards.length,
@@ -486,7 +477,6 @@ class _HelpScreenState extends State<HelpScreen> {
                               child: InkWell(
                                 borderRadius: BorderRadius.circular(16),
                                 onTap: () {
-                                  // Переход на статью
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -516,7 +506,6 @@ class _HelpScreenState extends State<HelpScreen> {
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            // Название с фиксированной высотой
                                             SizedBox(
                                               height: 40,
                                               child: Text(
@@ -530,7 +519,6 @@ class _HelpScreenState extends State<HelpScreen> {
                                               ),
                                             ),
                                             const SizedBox(height: 8),
-                                            // Время чтения
                                             Row(
                                               children: [
                                                 const Icon(Icons.access_time, size: 16, color: Colors.grey),
