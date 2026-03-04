@@ -69,6 +69,7 @@ class _StoryScreenState extends State<StoryScreen> {
   }
 
   Future<void> _speakLine(StoryLine line) async {
+    if (!mounted) return;
     if (_isSpeaking) return;
 
     _isSpeaking = true;
@@ -89,6 +90,7 @@ class _StoryScreenState extends State<StoryScreen> {
   }
 
   void _playNextLine() async {
+    if (!mounted) return;
     final progress = context.read<StoryProgress>();
     final lines = widget.story.lines;
 
@@ -101,6 +103,7 @@ class _StoryScreenState extends State<StoryScreen> {
   }
 
   void _toggleAudioMode(StoryProgress progress) async {
+    if (!mounted) return;
     setState(() => _isAudioMode = !_isAudioMode);
 
     final lines = widget.story.lines;
@@ -390,7 +393,16 @@ class _StoryScreenState extends State<StoryScreen> {
 
     return Stack(
       children: [
-        Positioned.fill(child: Container(color: settings.backgroundColor)),
+        if (widget.story.coverImage != null && settings.imagesEnabled)
+          Positioned.fill(
+            child: FittedBox(
+              fit: BoxFit.cover,
+              alignment: Alignment.center,
+              child: Image.asset(widget.story.coverImage!),
+            ),
+          )
+        else
+          Positioned.fill(child: Container(color: settings.backgroundColor)),
         Positioned.fill(child: Container(color: Colors.black.withOpacity(0.65))),
 
         // Кнопка "назад"
@@ -403,13 +415,14 @@ class _StoryScreenState extends State<StoryScreen> {
             elevation: 4,
             child: IconButton(
               icon: const Icon(Icons.arrow_back, color: Colors.black),
-              onPressed: () {
-                // Останавливаем озвучку и предотвращаем дальнейшие колбэки
-                _tts.stop();
+              onPressed: () async {
                 _isSpeaking = false;
+                await _tts.stop();
+                if (!mounted) return;
 
-                // Безопасный pop после окончания текущего фрейма
+                // Отложенный pop, чтобы Flutter успел завершить зависимости
                 WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (!mounted) return;
                   Navigator.of(context).pop();
                 });
               },
