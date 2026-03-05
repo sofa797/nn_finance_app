@@ -533,12 +533,402 @@ final List<Story> stories = [
     ),
 
     // ПЕРЕХОД К ТОЧКЕ 1
+    StoryLine(
+      text: '',
+      isNarration: true,
+      isInfoCard: true,
+      infoTitle: 'Нижегородская ярмарка',
+      infoDescription: 'Крупнейшая ярмарка Российской империи, которую называли «карманом России». Возникнув ещё в XVI веке у стен Макарьевского монастыря, после пожара 1816 года была перенесена в Нижний Новгород. Здесь вырос целый «город в городе» — 60 торговых корпусов, 2500 лавок, театры, цирк, гостиницы. Ежегодный оборот достигал 200 миллионов рублей — больше, чем на знаменитой Лейпцигской ярмарке. Сюда везли товары со всего света: английское сукно, немецкие станки, китайский чай, среднеазиатский хлопок. Именно здесь купцы заключали сделки, определявшие экономику всей страны, а ярмарочные банки задавали курс рубля.',
+      infoImage: 'assets/images/first_article.png',
+      backgroundImage: 'assets/images/fair_cards.png',
+    ),
 
+    StoryLine(
+      text: '''Пройдемте. Дядюшка приготовил все документы — письма от заказчиков, образцы товаров, отчеты. Начнем с них.''',
+      character: 'Громов',
+      image: 'assets/images/gromov.png',
+      backgroundImage: 'assets/images/fair_cards.png',
+    ),
     
+    // ТОЧКА 1: ГЛАВНЫЙ ЯРМАРОЧНЫЙ ДОМ — ГЕРБОВЫЙ ЗАЛ
+    // СЦЕНА 8: ВСТРЕЧА С НИКОЛАЕМ БУГРОВЫМ
+
+    StoryLine(
+      text: '''Николай Александрович, привел племянника.''',
+      character: 'Громов',
+      image: 'assets/images/gromov.png',
+      backgroundImage: 'assets/images/herald_hall.png', // Гербовый зал
+    ),
+    StoryLine(
+      text: '[Бугров поднимает голову, внимательно смотрит на Сашу. Встает, подходит, берет за плечи]',
+      isNarration: true,
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '''(тихо, с напряжением)
+Саша... Ты пришел. Спасибо.''',
+      character: 'Николай Бугров',
+      image: 'assets/images/bugrov.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '[Обнимает его по-отечески. Саша застывает, не зная, как реагировать]',
+      isNarration: true,
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '''(кивает, возвращается к столу)
+Времени мало, поэтому сразу к делу.''',
+      character: 'Николай Бугров',
+      image: 'assets/images/bugrov.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '''(тяжело вздыхает)
+Двадцать лет строил я это дело. От трех мельниц до крупнейшего поставщика муки в Поволжье. Кормлю армию, монастыри, заводы. Тысячи людей на меня работают, тысячи — мой хлеб едят.
+И вот — за три дня все рушится! Как карточный домик!''',
+      character: 'Николай Бугров',
+      image: 'assets/images/bugrov.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '''Громов рассказал про слухи... про спорынью.''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '''(мрачно)
+Не просто слухи. Три отказа. Три крупнейших заказчика. Смотри сам.''',
+      character: 'Николай Бугров',
+      image: 'assets/images/bugrov.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '[Достает три письма, раскладывает перед Сашей]',
+      isNarration: true,
+      image: 'assets/images/bugrov.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: 'Рукавишников, Блинов, Башкиров. Столпы купечества. Мои партнеры годами.',
+      character: 'Николай Бугров',
+      image: 'assets/images/bugrov.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+
+    StoryLine(
+      text: '[Саша берет первое письмо — на плотной бумаге с тисненым гербом]',
+      isNarration: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+
+    // ПИСЬМО №1
+    
+    StoryLine(
+      text: '',
+      isNarration: true,
+      backgroundImage: 'assets/images/letter_rukavishnikov.png',
+    ),
+    StoryLine(
+      text: 'Господину Н.А. Бугрову. 15 июля 1880 года.',
+      backgroundImage: 'assets/images/letter_rukavishnikov.png',
+      character: 'Александр Бугров',
+
+    ),
+    StoryLine(
+      text: 'Милостивый государь Николай Александрович! С прискорбием вынужден уведомить Вас о приостановке нашего договора на поставку 500 пудов пшеничной муки первого сорта для кондитерских заведений Торгового дома «М.Г. Рукавишников с сыновьями».',
+      backgroundImage: 'assets/images/letter_rukavishnikov.png',
+      character: 'Александр Бугров',
+
+    ),
+    StoryLine(
+      text: 'До меня дошли весьма тревожные сведения о возможном заражении партии Вашей муки спорыньей. Как Вы понимаете, репутация моих заведений не позволяет мне рисковать здоровьем клиентов, даже если слухи окажутся беспочвенными.',
+      backgroundImage: 'assets/images/letter_rukavishnikov.png',
+      character: 'Александр Бугров',
+
+    ),
+
+    StoryLine(
+      text: 'Контракт считаю расторгнутым до выяснения обстоятельств. С уважением, М.Г. Рукавишников',
+      backgroundImage: 'assets/images/letter_rukavishnikov.png',
+      character: 'Александр Бугров',
+    ),
+
+    StoryLine(
+      text: '''(горько)
+Михаил Григорьевич. Двенадцать лет с ним работаю. Ни одной претензии не было. И вдруг — «до меня дошли сведения». Откуда дошли? От кого?
+И еще 2 письма с таким же содержанием.''',
+      character: 'Николай Бугров',
+      image: 'assets/images/bugrov.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+
+// ПИСЬМО №2
+    StoryLine(
+      text: '[Саша берет второе письмо — почерк более резкий, бумага попроще]',
+      isNarration: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+
+    StoryLine(
+      text: '',
+      isNarration: true,
+      backgroundImage: 'assets/images/letter_blinov.png',
+    ),
+    StoryLine(
+      text: 'Н.А. Бугрову. 16 июля 1880 года.',
+      backgroundImage: 'assets/images/letter_blinov.png',
+      character: 'Александр Бугров',
+    ),
+    StoryLine(
+      text: 'Николай Александрович! Вынужден отказаться от закупки 800 пудов ржаной муки для пекарен Блиновского товарищества.',
+      backgroundImage: 'assets/images/letter_blinov.png',
+      character: 'Александр Бугров',
+    ),
+    StoryLine(
+      text: 'На вчерашнем заседании Биржевого комитета господин Терентьев доложил о случаях отравления мукой с признаками спорыньи. Хотя Ваше имя напрямую не называлось, по срокам и объемам поставок несложно установить, о ком речь.',
+      backgroundImage: 'assets/images/letter_blinov.png',
+      character: 'Александр Бугров',
+    ),
+    StoryLine(
+      text: 'Понимаю, что для Вас это удар, но я не могу рисковать здоровьем рабочих моих заводов. Честь дороже прибыли — это я усвоил раз и навсегда.',
+      backgroundImage: 'assets/images/letter_blinov.png',
+      character: 'Александр Бугров',
+    ),
+    StoryLine(
+      text: 'Надеюсь на скорое разрешение ситуации. Ф.А. Блинов. ',
+      backgroundImage: 'assets/images/letter_blinov.png',
+      character: 'Александр Бугров',
+    ),
+
+    StoryLine(
+      text: '''(настораживается)
+Биржевой комитет? Господин Терентьев?''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '''Иван Федорович Терентьев, секретарь комитета. Чиновник. Всегда был корректен. Но в этом письме... заметил?''',
+      character: 'Николай Бугров',
+      image: 'assets/images/bugrov.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '''«Ваше имя напрямую не называлось, но по срокам несложно установить». То есть кто-то специально подал информацию так, чтобы указать именно на вас, но формально не обвинять.''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '''(одобрительно кивает)
+Вот-вот. Тонко. Кто-то играет умно.''',
+      character: 'Николай Бугров',
+      image: 'assets/images/bugrov.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+
+    // ПИСЬМО №3
+    StoryLine(
+      
+      text: '[Саша берет третье письмо — самое короткое, почерк нервный]',
+      isNarration: true,
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+
+    StoryLine(
+      text: '',
+      isNarration: true,
+      backgroundImage: 'assets/images/letter_bashkirov.png',
+    ),
+    StoryLine(
+      text: 'Бугрову. 17 июля 1880 года.',
+      backgroundImage: 'assets/images/letter_bashkirov.png',
+      character: 'Александр Бугров',
+    ),
+    StoryLine(
+      text: 'Расторгаю договор на 300 пудов муки. Получил официальное предупреждение от санитарного надзора о необходимости проверки поставщиков. Ваше имя было названо первым.',
+      backgroundImage: 'assets/images/letter_bashkirov.png',
+      character: 'Александр Бугров',
+    ),
+    StoryLine(
+      text: 'Разбирайтесь сами. Башкиров.',
+      backgroundImage: 'assets/images/letter_bashkirov.png',
+      character: 'Александр Бугров',
+    ),
 
 
-
-
+    StoryLine(
+      text: '''(мрачно)
+Дмитрий Башкиров... От него можно было такое ожидать. Это письмо — самое важное.''',
+      character: 'Николай Бугров',
+      image: 'assets/images/bugrov.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '''Почему?''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '''«Официальное предупреждение от санитарного комитета». Это уже не слухи. Это документ. Значит, кто-то пробрался в официальные структуры.''',
+      character: 'Николай Бугров',
+      image: 'assets/images/bugrov.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '''(от двери)
+Или подкупил чиновника.''',
+      character: 'Громов',
+      image: 'assets/images/gromov.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '''(задумчиво складывает письма)
+Смотрите на даты. 15-е, 16-е, 17-е июля. Три дня подряд. Три письма. Но...
+Если слухи о заражении появились недавно, то образцы муки они должны были брать раньше. Значит, отказы пришли слишком быстро. Слишком синхронно.''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '''(восхищенно)
+Точно! Я об этом думал, но не мог сформулировать. Это организованная атака.''',
+      character: 'Николай Бугров',
+      image: 'assets/images/bugrov.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '''А контракт с армией?''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '''(тяжело)
+Сегодня вечером. Собрание купечества. Представитель военного ведомства будет. Если до того времени не докажу, что мука чиста — потеряю контракт на 50 тысяч рублей. Это... это конец, Саша.''',
+      character: 'Николай Бугров',
+      image: 'assets/images/bugrov.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '''(тяжело)
+Мне уже сорок восемь. Три жены в могиле, трое детей. Одно дело осталось — помогать людям. Ночлежки, столовые, больницы... Все на эти деньги. Если разорюсь — тысячи останутся без помощи.''',
+      character: 'Николай Бугров',
+      image: 'assets/images/bugrov.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '''(твердо)
+Не разоритесь. Я найду, кто за этим стоит.''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '''(поднимает глаза, в них надежда)
+Ты всегда был умнее других, племянник. Поможешь старику?''',
+      character: 'Николай Бугров',
+      image: 'assets/images/bugrov.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '''Помогу. Что нужно сделать?''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '''(встает, деловито)
+Первое — проверь склады, где хранится моя мука. Поговори с контролерами, смотрителем. Убедись, что с товаром все в порядке.''',
+      character: 'Николай Бугров',
+      image: 'assets/images/bugrov.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '''Там Семен Палыч заведует, Семен Кротов. Нервный он стал последнее время, но работящий.''',
+      character: 'Громов',
+      image: 'assets/images/gromov.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '''Второе — пообщайся с заказчиками. Рукавишникова найдешь в его усадьбе на Верхне-Волжской набережной. Блинова — в его пассаже. Башкирова... ну, этого трогать не стоит.''',
+      character: 'Николай Бугров',
+      image: 'assets/images/bugrov.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '''А что со свидетелями? Кто мог распространять слухи?''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '''Громов говорит, последняя проверка муки была в Спасском соборе. Церковный староста освящал товар перед отправкой. Может, он что-то видел.''',
+      character: 'Николай Бугров',
+      image: 'assets/images/bugrov.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '''Отец Серафим. Честный человек, не подкупишь.''',
+      character: 'Громов',
+      image: 'assets/images/gromov.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '''(подходит к Саше, кладет руку на плечо)
+У тебя до вечерней службы. Часов восемь. Найди источник слухов, докажи, что мука чиста, и приведи мне имя злодея. Сможешь?''',
+      character: 'Николай Бугров',
+      image: 'assets/images/bugrov.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '''(кивает)
+Постараюсь.''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '''Громов, дай племяннику образцы муки, копии писем, пропуск на склады.''',
+      character: 'Николай Бугров',
+      image: 'assets/images/bugrov.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '''Будет исполнено, Николай Александрович.''',
+      character: 'Громов',
+      image: 'assets/images/gromov.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '''(Саше)
+Иди. И помни — время не ждет. К шести вечера все решится.''',
+      character: 'Николай Бугров',
+      image: 'assets/images/bugrov.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
+    StoryLine(
+      text: '''(вслед, тихо)
+Саша... Спасибо, что вернулся. Кровь не обманешь. Ты — настоящий Бугров.''',
+      character: 'Николай Бугров',
+      image: 'assets/images/bugrov.png',
+      backgroundImage: 'assets/images/herald_hall.png',
+    ),
 
     ],
   ),

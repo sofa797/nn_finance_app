@@ -371,7 +371,7 @@ class _StoryScreenState extends State<StoryScreen> {
 
           if (current.isNarration)
             Center(child: _buildNarrationBubble(context, current, settings)),
-          if (!current.isNarration)
+          if (!current.isNarration && current.text.isNotEmpty)
             _buildCharacterBubble(context, current, settings),
         ],
       ),
