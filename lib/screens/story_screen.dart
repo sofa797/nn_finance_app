@@ -80,6 +80,14 @@ class _StoryScreenState extends State<StoryScreen> {
     _isSpeaking = true;
     await _tts.stop();
 
+    String textToSpeak;
+    if (line.isInfoCard && line.infoDescription != null) {
+      textToSpeak = line.infoDescription!;
+      } 
+      else {
+        textToSpeak = line.text;
+      }
+
     if (line.isNarration) {
       await _tts.setSpeechRate(0.38);
       await _tts.setPitch(0.95);
@@ -91,7 +99,7 @@ class _StoryScreenState extends State<StoryScreen> {
       await _tts.setPitch(1.05);
     }
 
-    await _tts.speak("… ${line.text}");
+    await _tts.speak("… $textToSpeak");
   }
 
   void _playNextLine() async {
@@ -119,6 +127,19 @@ class _StoryScreenState extends State<StoryScreen> {
     } else {
       await _tts.stop();
       _isSpeaking = false;
+    }
+  }
+
+  String _getCharacterId(String characterName) {
+    switch(characterName) {
+      case 'Александр Бугров': return 'alex';
+      case 'Николай Бугров': return 'bugrov';
+      case 'Громов': return 'gromov';
+      case 'Продавщица': return 'saleswoman';
+      case 'Отец Серафим': return 'seraphim';
+      case 'Иван Терентьев': return 'terentev';
+      case 'Семён Кротов': return 'semen';
+      default: return characterName.toLowerCase().replaceAll(' ', '_');
     }
   }
 
@@ -308,6 +329,15 @@ class _StoryScreenState extends State<StoryScreen> {
     if (current.isInfoCard) {
       return _buildInfoCard(current, settings);
     }
+
+    if (settings.imagesEnabled && current.image != null && current.character != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!_isDisposed && mounted) {
+          String charId = _getCharacterId(current.character!);
+          progress.markCharacterAsMet(charId);
+        }
+      });
+    }
         
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -351,6 +381,7 @@ class _StoryScreenState extends State<StoryScreen> {
                   : Colors.black.withOpacity(0.35),
             ),
           ),
+
           if (settings.imagesEnabled && current.image != null)
             Align(
               alignment: current.isMainHero ? Alignment.bottomRight : Alignment.bottomLeft,

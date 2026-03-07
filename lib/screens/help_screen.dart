@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import '../settings/story_progress.dart';
 
 import 'virtual_tour_screen.dart';
 import '../settings/app_settings.dart';
@@ -247,6 +248,19 @@ class _HelpScreenState extends State<HelpScreen> {
   }
 
   Widget _buildCharactersPage(AppSettings settings) {
+    final progress = context.watch<StoryProgress>();
+    
+    // ПЕРСОНАЖИ
+    final List<Map<String, String>> allCharacters = [
+      {'id': 'alex', 'image': 'assets/images/alex.png', 'name': 'Александр Бугров', 'description': 'Главный герой, стажёр ЦБ, потомок купеческого рода.'},
+      {'id': 'bugrov', 'image': 'assets/images/bugrov.png', 'name': 'Николай Бугров', 'description': 'Хлебный король Поволжья, дядя Александра. Купец-миллионер, благотворитель.'},
+      {'id': 'gromov', 'image': 'assets/images/gromov.png', 'name': 'Михаил Громов', 'description': 'Приказчик Николая Бугрова, его правая рука. Преданный помощник.'},
+      {'id': 'saleswoman', 'image': 'assets/images/saleswoman.png', 'name': 'Продавщица', 'description': 'Загадочная женщина с ярмарки, которая дала Саше старинную монету.'},
+      {'id': 'seraphim', 'image': 'assets/images/seraphim.png', 'name': 'Отец Серафим', 'description': 'Церковный староста Спасского собора. Честный и наблюдательный.'},
+      {'id': 'terentev', 'image': '', 'name': 'Иван Терентьев', 'description': 'Секретарь Биржевого комитета. Главный антагонист истории.'},
+      {'id': 'semen', 'image': 'assets/images/semen.png', 'name': 'Семён Кротов', 'description': 'Смотритель складов Бугрова. Нервный, но работящий. Сын мукомола Кротова.'},
+    ];
+
     return GridView.builder(
       padding: const EdgeInsets.all(16),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -255,13 +269,24 @@ class _HelpScreenState extends State<HelpScreen> {
         crossAxisSpacing: 16,
         mainAxisSpacing: 16,
       ),
-      itemCount: HelpScreen.characterCards.length,
+      itemCount: allCharacters.length,
       itemBuilder: (context, index) {
-        final char = HelpScreen.characterCards[index];
+        final char = allCharacters[index];
+        final isUnlocked = progress.hasMetCharacter(char['id']!);
+        
         return FlipCard(
           direction: FlipDirection.HORIZONTAL,
-          front: _buildCharacterFront(char['image']!, char['name']!),
-          back: _buildCardBackCentered(char['description']!, settings),
+          front: _buildCharacterFront(
+            isUnlocked && char['image']!.isNotEmpty ? char['image']! : null, 
+            char['name']!,
+            isUnlocked,
+          ),
+          back: _buildCardBackCentered(
+            isUnlocked 
+                ? char['description']! 
+                : ' Вы ещё не встречали этого персонажа. Пройдите сюжет, чтобы познакомитсья с ним!',
+            settings,
+          ),
         );
       },
     );
@@ -329,18 +354,36 @@ class _HelpScreenState extends State<HelpScreen> {
     );
   }
 
-  Widget _buildCharacterFront(String imagePath, String name) {
+  Widget _buildCharacterFront(String? imagePath, String name, bool isUnlocked) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Expanded(
           child: ClipRRect(
             borderRadius: BorderRadius.circular(16),
-            child: Image.asset(imagePath, width: double.infinity, fit: BoxFit.cover),
+            child: imagePath != null && isUnlocked
+                ? Image.asset(
+                    imagePath,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  )
+                : Image.asset(
+                    'assets/images/question_mark.png', 
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
           ),
         ),
         const SizedBox(height: 8),
-        Text(name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16), textAlign: TextAlign.center),
+        if (isUnlocked)
+        Text(
+          name, 
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ), 
+          textAlign: TextAlign.center,
+        ),
       ],
     );
   }

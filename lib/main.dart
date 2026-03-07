@@ -7,14 +7,17 @@ import 'services/user_location_service.dart';
 import 'services/podcast_manager.dart';
 import 'settings/currency_manager.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  final storyProgress = StoryProgress();
+  await storyProgress.loadFromPrefs();
 
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AppSettings()),
-        ChangeNotifierProvider(create: (_) => StoryProgress()),
+        ChangeNotifierProvider(create: (_) => storyProgress),
         ChangeNotifierProvider(create: (_) => PodcastManager()),
         ChangeNotifierProvider(create: (_) => CurrencyManager()),
         ChangeNotifierProvider(
