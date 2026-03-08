@@ -28,6 +28,7 @@ class StoryLine {
   final bool isMainHero;
   final bool isNarration;
   final String? backgroundImage;
+  final InteractiveTask? task;
 
   final bool isInfoCard;
   final String? infoTitle;
@@ -41,10 +42,31 @@ class StoryLine {
     this.isMainHero = false,
     this.isNarration = false,
     this.backgroundImage,
-
+    this.task,
     this.isInfoCard = false,
     this.infoTitle,
     this.infoDescription,
     this.infoImage,
   });
+}
+
+class InteractiveTask {
+  final String question;
+  final List<InteractiveOption> options;
+  final int requiredCorrect;
+  final bool isOnline;
+
+  InteractiveTask({
+    required this.question,
+    required this.options,
+    required this.requiredCorrect,
+    this.isOnline = true,
+  });
+}
+
+class InteractiveOption {
+  final String text;
+  final bool isCorrect;
+
+  InteractiveOption({required this.text, required this.isCorrect});
 }

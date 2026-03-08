@@ -28,6 +28,10 @@ class _StoryScreenState extends State<StoryScreen> {
   bool _isSpeaking = false;
   bool _isOnMapPage = false;
 
+  Set<int> _selectedIndexes = {};
+  bool _taskAnswered = false;
+  bool _taskWasCorrect = false;
+
   late PageController _pageController;
 
   bool _endStoryProcessed = false;
@@ -83,10 +87,9 @@ class _StoryScreenState extends State<StoryScreen> {
     String textToSpeak;
     if (line.isInfoCard && line.infoDescription != null) {
       textToSpeak = line.infoDescription!;
-      } 
-      else {
-        textToSpeak = line.text;
-      }
+    } else {
+      textToSpeak = line.text;
+    }
 
     if (line.isNarration) {
       await _tts.setSpeechRate(0.38);
@@ -151,16 +154,12 @@ class _StoryScreenState extends State<StoryScreen> {
     final isEnd = progress.isCompleted(widget.story.id, lines.length);
 
     if (isEnd && !_endStoryProcessed) {
-      final currency = context.read<CurrencyManager>();
-      const int goldEarned = 5;
-      const int silverEarned = 10;
-      currency.addGold(goldEarned);
-      currency.addSilver(silverEarned);
-
-      _cachedGold = currency.gold;
-      _cachedSilver = currency.silver;
-      
-       _endStoryProcessed = true;
+      // final currency = context.read<CurrencyManager>();
+      // const int goldEarned = 5;
+      // const int silverEarned = 10;
+      // currency.addGold(goldEarned);
+      // currency.addSilver(silverEarned);
+      _endStoryProcessed = true;
     }
 
     return Scaffold(
@@ -243,81 +242,82 @@ class _StoryScreenState extends State<StoryScreen> {
         ),
       Container(color: Colors.black.withOpacity(0.6)),
       Center(
-        child: Container(
-          margin: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: const Color(0xFFD2B48C), width: 3),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (current.infoImage != null)
-                ClipRRect(
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(21),
+        child: SingleChildScrollView(
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20),
+            decoration: BoxDecoration(
+              color: Colors.white,          // <-- белый фон для текста
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(color: const Color(0xFFD2B48C), width: 3),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (current.infoImage != null)
+                  ClipRRect(
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(21),
+                    ),
+                    child: Image.asset(
+                      current.infoImage!,
+                      height: 160,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                  child: Image.asset(
-                    current.infoImage!,
-                    height: 160,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  children: [
-                    Text(
-                      current.infoTitle ?? 'Справка',
-                      style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF5D3A1A),
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      Text(
+                        current.infoTitle ?? 'Справка',
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF5D3A1A),
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      current.infoDescription ?? '',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                    const SizedBox(height: 20),
-                    
-                    GestureDetector(
-                      onTap: () {
-                        if (!mounted) return;
-                        context.read<StoryProgress>().next(
-                          widget.story.id,
-                          widget.story.lines.length,
-                        );
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 24,
-                          vertical: 10,
-                        ),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFD2B48C),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: const Text(
-                          'Понятно',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                      const SizedBox(height: 12),
+                      Text(
+                        current.infoDescription ?? '',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(height: 20),
+                      GestureDetector(
+                        onTap: () {
+                          if (!mounted) return;
+                          context.read<StoryProgress>().next(
+                                widget.story.id,
+                                widget.story.lines.length,
+                              );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 10,
+                          ),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFD2B48C),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: const Text(
+                            'Понятно',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
+      )
     ],
   );
 }
@@ -330,6 +330,10 @@ class _StoryScreenState extends State<StoryScreen> {
       return _buildInfoCard(current, settings);
     }
 
+    if (current.task != null) {
+      return _buildInteractiveTask(context, current.task!, progress, settings);
+    }
+
     if (settings.imagesEnabled && current.image != null && current.character != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!_isDisposed && mounted) {
@@ -338,7 +342,6 @@ class _StoryScreenState extends State<StoryScreen> {
         }
       });
     }
-        
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () async {
@@ -385,17 +388,15 @@ class _StoryScreenState extends State<StoryScreen> {
           if (settings.imagesEnabled && current.image != null)
             Align(
               alignment: current.isMainHero ? Alignment.bottomRight : Alignment.bottomLeft,
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 500),
-                child: Transform.translate(
-                  key: ValueKey('char_${current.image}_${_characterKeyCounter++}'),
-                  offset: current.isMainHero ? const Offset(60, 50) : const Offset(-60, 50),
-                  child: Image.asset(
-                    current.image!,
-                    height: MediaQuery.of(context).size.height * 0.88,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
+              child: Transform.translate(
+                offset: current.isMainHero 
+                    ? const Offset(40, 0)  // сдвиг вправо от центра
+                    : const Offset(-40, 0), // сдвиг влево от центра
+                child: Image.asset(
+                  current.image!,
+                  height: MediaQuery.of(context).size.height * 0.88,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
@@ -410,6 +411,160 @@ class _StoryScreenState extends State<StoryScreen> {
     );
     
   }
+
+Widget _buildInteractiveTask(BuildContext context, InteractiveTask task,
+    StoryProgress progress, AppSettings settings) {
+
+  return StatefulBuilder(
+    builder: (context, setState) {
+      return Center(
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.95),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                task.question,
+                style: TextStyle(
+                  fontSize: 18 * settings.textScale,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+
+              ...List.generate(task.options.length, (index) {
+                final option = task.options[index];
+                final isSelected = _selectedIndexes.contains(index);
+
+                Color bgColor = Colors.grey.shade200;
+                Color textColor = Colors.black87;
+
+                if (_taskAnswered) {
+                  if (option.isCorrect) {
+                    bgColor = Colors.green.shade400;
+                    textColor = Colors.white;
+                  } else if (isSelected) {
+                    bgColor = Colors.red.shade400;
+                    textColor = Colors.white;
+                  }
+                } else if (isSelected) {
+                  bgColor = Colors.blue.shade300;
+                  textColor = Colors.white;
+                }
+
+                return GestureDetector(
+                  onTap: _taskAnswered 
+                      ? null
+                      : () {
+                          setState(() {
+                            if (isSelected) {
+                              _selectedIndexes.remove(index);
+                            } else if (_selectedIndexes.length <
+                                task.requiredCorrect) {
+                              _selectedIndexes.add(index);
+                            }
+                          });
+                        },
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: bgColor,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      option.text,
+                      style: TextStyle(
+                        color: textColor,
+                        fontSize: 16 * settings.textScale,
+                      ),
+                    ),
+                  ),
+                );
+              }),
+
+              const SizedBox(height: 16),
+
+              ElevatedButton(
+                onPressed: _taskAnswered
+                  ? () {
+                      setState(() {
+                        _selectedIndexes.clear();
+                        _taskAnswered = false;
+                        _taskWasCorrect = false;
+                      });
+
+                      progress.next(widget.story.id, widget.story.lines.length);
+                    }
+                    : _selectedIndexes.length == task.requiredCorrect
+                        ? () async {
+                            final currency =
+                                context.read<CurrencyManager>();
+
+                            bool allCorrect =
+                                _selectedIndexes.every((i) =>
+                                        task.options[i].isCorrect) &&
+                                    task.options
+                                            .where((o) => o.isCorrect)
+                                            .length ==
+                                        _selectedIndexes.length;
+
+                            setState(() {
+                              _taskAnswered  = true;
+                              _taskWasCorrect  = allCorrect;
+                            });
+
+                            if (allCorrect) {
+                              if (task.isOnline) {
+                                const int silverEarned = 10;
+                                await currency.addSilver(silverEarned);
+                                progress.addSilver(
+                                    widget.story.id, silverEarned);
+
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        'Вы правильно ответили и получили 10 серебряных монет!'),
+                                  ),
+                                );
+                              } else {
+                                const int goldEarned = 5;
+                                await currency.addGold(goldEarned);
+                                progress.addGold(widget.story.id, goldEarned);
+
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        'Вы правильно ответили и получили 5 золотых монет!'),
+                                  ),
+                                );
+                              }
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                      'Ответ неверный. Правильные варианты показаны.'),
+                                ),
+                              );
+                            }
+                          }
+                        : null,
+                child: Text(_taskAnswered? 'Продолжить' : 'Подтвердить'),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
 
   Widget _buildNarrationBubble(
       BuildContext context, StoryLine current, AppSettings settings) {
@@ -511,12 +666,10 @@ class _StoryScreenState extends State<StoryScreen> {
       ),
     );
   }
-
-
-
 Widget _buildEndStory(BuildContext context, AppSettings settings, StoryProgress progress) {
-  const int goldEarned = 5;
-  const int silverEarned = 10;
+  final currency = context.watch<CurrencyManager>();
+  final int goldEarned = progress.getGoldEarned(widget.story.id);
+  final int silverEarned = progress.getSilverEarned(widget.story.id);
   const goldColor = Colors.amber;
   const silverColor = Colors.grey;
 
@@ -547,7 +700,6 @@ Widget _buildEndStory(BuildContext context, AppSettings settings, StoryProgress 
               _isSpeaking = false;
               await _tts.stop();
               if (!mounted) return;
-
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 if (!mounted) return;
                 Navigator.of(context).pop();
@@ -610,7 +762,7 @@ Widget _buildEndStory(BuildContext context, AppSettings settings, StoryProgress 
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Всего: $_cachedGold', // ← из кэша
+                        'Всего: ${currency.gold}',
                         style: TextStyle(
                           fontSize: 14 * settings.textScale,
                           color: Colors.black87,
@@ -640,7 +792,7 @@ Widget _buildEndStory(BuildContext context, AppSettings settings, StoryProgress 
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Всего: $_cachedSilver', 
+                        'Всего: ${currency.silver}',
                         style: TextStyle(
                           fontSize: 14 * settings.textScale,
                           color: Colors.black87,

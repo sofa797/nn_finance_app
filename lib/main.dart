@@ -11,7 +11,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final storyProgress = StoryProgress();
-  await storyProgress.loadFromPrefs();
+  //await storyProgress.loadFromPrefs();
 
   runApp(
     MultiProvider(
