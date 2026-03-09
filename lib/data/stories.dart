@@ -6,7 +6,7 @@ final List<Story> stories = [
     title: 'Тайна Кармана',
     coverImage: 'assets/images/background_story1_main_menu.png',
     description: 'Стажёр Центробанка Александр Бугров получает от загадочной продавщицы старинную монету и переносится в 1885 год. Его дальний родственник, купец Николай Бугров, обвинён в продаже отравленной муки. У Саши есть всего несколько часов, чтобы разоблачить заговорщика и спасти честь семьи.',
-    routePoints: 8,
+    routePoints: 9,
     routeTime: 70,
     status: 'ready',
     lines: [
@@ -520,46 +520,12 @@ final List<Story> stories = [
       isNarration: true,
       backgroundImage: 'assets/images/fair_cards.png',
     ),
-//     StoryLine(
-//       text: '''(останавливается у входа, серьезно смотрит на Сашу)
-// Вы — единственная надежда, Александр Николаевич. У вас голова светлая, образование столичное. Дядюшка говорит — вы видите то, что другие не замечают. Найдите, кто за этим стоит. До вечерней службы в Спасском соборе. Иначе...''',
-//       character: 'Громов',
-//       // image: пока нет картинки
-//       backgroundImage: 'assets/images/fair_cards.png',
-//     ),
     StoryLine(
       text: '''(останавливается у входа, серьезно смотрит на Сашу)
-    Вы — единственная надежда, Александр Николаевич...''',
+Вы — единственная надежда, Александр Николаевич. У вас голова светлая, образование столичное. Дядюшка говорит — вы видите то, что другие не замечают. Найдите, кто за этим стоит. До вечерней службы в Спасском соборе. Иначе...''',
       character: 'Громов',
       image: 'assets/images/gromov.png',
-
       backgroundImage: 'assets/images/fair_cards.png',
-      task: InteractiveTask(
-        question: 'Прежде чем согласиться на помощь, выбери три правдивых факта о Бугрове:',
-        requiredCorrect: 3,
-        options: [
-          InteractiveOption(
-            text: 'Основал Нижегородский университет',
-            isCorrect: false,
-          ),
-          InteractiveOption(
-            text: 'Построил первую в Нижнем Новгороде ночлежку для бездомных',
-            isCorrect: true,
-          ),
-          InteractiveOption(
-            text: 'Владел хлебными мельницами и назывался «хлебным королем»',
-            isCorrect: true,
-          ),
-          InteractiveOption(
-            text: 'Финансировал строительство больниц и приютов',
-            isCorrect: true,
-          ),
-          InteractiveOption(
-            text: 'Был художником, писал картины маслом',
-            isCorrect: false,
-          ),
-        ],
-      ),
     ),
     StoryLine(
       text: '''(выпрямляется, кивает)
@@ -595,7 +561,7 @@ final List<Story> stories = [
       text: '''Николай Александрович, привел племянника.''',
       character: 'Громов',
       image: 'assets/images/gromov.png',
-      backgroundImage: 'assets/images/herald_hall.png', // Гербовый зал
+      backgroundImage: 'assets/images/herald_hall.png',
     ),
     StoryLine(
       text: '[Бугров поднимает голову, внимательно смотрит на Сашу. Встает, подходит, берет за плечи]',
@@ -1092,15 +1058,30 @@ final List<Story> stories = [
       image: 'assets/images/gromov.png',
       backgroundImage: 'assets/images/herald_hall.png',
     ),
+    
+    // ЭКРАН ВЫБОРА
     StoryLine(
-      text: '''Так как, Александр Николаевич? Куда направимся?''',
+      text: 'Так как, Александр Николаевич? Куда направимся?',
       character: 'Громов',
-      image: 'assets/images/gromov.png',
+      sceneId: 'choice_strategy',
+      choices: [
+        Choice(
+          text: 'В Спасский собор',
+          description: 'Поговорить со старостой',
+          targetSceneId: 'cathedral_path',
+        ),
+        Choice(
+          text: 'На склады',
+          description: 'Проверить образцы муки',
+          targetSceneId: 'warehouse_path',
+        ),
+      ],
       backgroundImage: 'assets/images/herald_hall.png',
     ),
     
     // ВАРИАНТ А: ИДТИ В СПАССКИЙ СОБОР
     StoryLine(
+      sceneId: 'cathedral_path',
       text: '''Пойду сначала к старосте. Если он что-то видел при освящении — это может дать зацепку, кто стоит за заговором.''',
       character: 'Александр Бугров',
       isMainHero: true,
@@ -1116,8 +1097,6 @@ final List<Story> stories = [
     
     // ТОЧКА 2: СПАССКИЙ СТАРОЯРМАРОЧНЫЙ СОБОР
     // СЦЕНА 9: ПУТЬ К СОБОРУ
-
-// ПРОСТО ТЕКСТ, ВЫБОРА ПОКА НЕТ!!!
 
     StoryLine(
       text: '[Саша и Громов идут по главной аллее ярмарки. Вокруг — каменные торговые корпуса, купцы зазывают покупателей, грузчики таскают тюки]',
@@ -1223,7 +1202,7 @@ final List<Story> stories = [
       text: '''(поворачивается, кланяется)
 Господь с вами, Петр Иванович. Что за гости в неурочный час?''',
       character: 'Отец Серафим',
-      image: 'assets/images/seraphin.png',
+      image: 'assets/images/seraphim.png',
       backgroundImage: 'assets/images/old_fair_spassky_cathedral.jpg',
     ),
     StoryLine(
@@ -1236,7 +1215,7 @@ final List<Story> stories = [
       text: '''(внимательно смотрит на Сашу, прищуривается)
 Бугров-младший... Слышал о вас. Образование столичное получили, говорят. В Москве учились?''',
       character: 'Отец Серафим',
-      image: 'assets/images/seraphin.png',
+      image: 'assets/images/seraphim.png',
       backgroundImage: 'assets/images/old_fair_spassky_cathedral.jpg',
     ),
     StoryLine(
@@ -1251,13 +1230,561 @@ final List<Story> stories = [
       text: '''(кивает)
 Видно по вам. Глаза умные, речь правильная. Не то что наши купчики — те больше по лавкам да счетам. Проходите в храм, поговорим.''',
       character: 'Отец Серафим',
-      image: 'assets/images/seraphin.png',
+      image: 'assets/images/seraphim.png',
       backgroundImage: 'assets/images/old_fair_spassky_cathedral.jpg',
     ),
+
+    // СЦЕНА 10: ВНУТРИ СОБОРА
+    StoryLine(
+      text: '[Входят в собор. Высокие своды, белые стены, золотые иконостасы. Солнце пробивается через окна, создавая торжественный полумрак. На стенах — иконы в необычной манере: святые с реалистичными лицами, драпировки одежд выписаны детально, руки и ноги изображены анатомически точно]',
+      isNarration: true,
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''Отец Серафим, мы по делу пришли. Расскажите Александру Николаевичу про освящение муки на прошлой неделе.''',
+      character: 'Громов',
+      image: 'assets/images/gromov.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''(серьезнеет)
+А, то освящение... Да, помню. Николай Александрович заказывал. Три партии муки — для Рукавишникова, Блинова и Башкирова. Обычная процедура.''',
+      character: 'Отец Серафим',
+      image: 'assets/images/seraphim.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''Расскажите подробнее. Как это происходит?''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''Да просто. Привозят образцы товара — мешочки с мукой. Я служу молебен, окропляю святой водой, читаю молитвы. Купец ставит свечку, жертвует на храм. Потом образцы увозят обратно на склады, а оттуда — заказчикам.''',
+      character: 'Отец Серафим',
+      image: 'assets/images/seraphim.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''И тогда все прошло как обычно?''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''(задумывается)
+Ну... почти. Николай Александрович сам не приехал, прислал приказчиков. Громов был, еще двое помощников. Службу отслужили, товар освятили...
+Но после службы один человек подошел. Незнакомый.''',
+      character: 'Отец Серафим',
+      image: 'assets/images/seraphim.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''(настораживается)
+Кто?''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''Представился — из Биржевого комитета. Сказал, контроль плановый проводит, интересуется процедурой освящения товаров.''',
+      character: 'Отец Серафим',
+      image: 'assets/images/seraphim.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''Из Биржевого комитета? А зачем им освящение контролировать?''',
+      character: 'Громов',
+      image: 'assets/images/gromov.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''(пожимает плечами)
+Я тоже удивился, но не стал спорить. Чиновник — значит, его дело. Отвечал на вопросы.''',
+      character: 'Отец Серафим',
+      image: 'assets/images/seraphim.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''Какие вопросы он задавал?''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''(вспоминает)
+Спрашивал, где образцы хранятся до отправки. Как проверяют качество. Кто за сохранность отвечает. Я ему по простоте душевной все рассказал.''',
+      character: 'Отец Серафим',
+      image: 'assets/images/seraphim.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''И что вы сказали?''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''Что после освящения образцы отвозят на пакгаузы, в хранилище Сибирской пристани. Там смотритель Семен Палыч их охраняет. А проверяют товар санитарные контролеры — раз в неделю приезжают, берут пробы.''',
+      character: 'Отец Серафим',
+      image: 'assets/images/seraphim.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''(обменивается взглядом с Громовым)
+То есть между освящением и отправкой образцы лежат на складе?''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''Да, день-два обычно. Николай Александрович так заведено делает — освящает заранее, чтобы с божьим благословением товар шел.''',
+      character: 'Отец Серафим',
+      image: 'assets/images/seraphim.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''Опишите того чиновника. Как он выглядел?''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''Лет сорока, может чуть старше. Среднего роста, бородка клином, рыжеватая. Сюртук добротный, шляпа цилиндром. Глаза... бегающие какие-то. Говорил вкрадчиво, но что-то в нем неприятное было.''',
+      character: 'Отец Серафим',
+      image: 'assets/images/seraphim.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''А имя не назвал?''',
+      character: 'Громов',
+      image: 'assets/images/gromov.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''Нет, только должность — секретарь Биржевого комитета. Или помощник секретаря, не помню точно.''',
+      character: 'Отец Серафим',
+      image: 'assets/images/seraphim.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''А он что-то делал? К образцам подходил?''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''(качает головой)
+К образцам нет, я бы не допустил. Освященный товар — без нужды не трогают. Но...
+Он долго у выхода стоял, с кем-то разговаривал. Я краем глаза видел, когда алтарь прибирал.''',
+      character: 'Отец Серафим',
+      image: 'assets/images/seraphim.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''С кем?''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''Не разглядел — спиной стоял тот человек. Но передавал что-то чиновнику. Мешочек небольшой, вроде тех, в которых образцы хранят.''',
+      character: 'Отец Серафим',
+      image: 'assets/images/seraphim.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''(возбужденно)
+Мешочек?! С мукой?''',
+      character: 'Громов',
+      image: 'assets/images/gromov.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''Похоже. Но не уверен — служба началась, народ в храм пошел, я внутрь ушел. Больше не видел.''',
+      character: 'Отец Серафим',
+      image: 'assets/images/seraphim.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''А на чиновнике была печать? Знак какой?''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''(удивляется)
+Как вы догадались? Была. На цепочке висела, я заметил, когда он документы доставал.''',
+      character: 'Отец Серафим',
+      image: 'assets/images/seraphim.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''Какая печать?''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''(прищуривается, вспоминает)
+Герб необычный. Не городской, не государственный... Два колоса перекрещены, а поверх — жернов мельничный. Я еще подумал — странно, чиновнику Биржевого комитета зачем мельничный герб носить?''',
+      character: 'Отец Серафим',
+      image: 'assets/images/seraphim.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''(глаза загораются)
+Два колоса и жернов... Это символ мукомольного дела!''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''Точно! Я такой герб видел... У кого-то из мукомолов.''',
+      character: 'Громов',
+      image: 'assets/images/gromov.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''Вспоминайте. У кого?''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''(чешет затылок)
+Петров, Смирнов, Кротов... У одного из них точно такой герб на вывеске. Надо проверить.''',
+      character: 'Громов',
+      image: 'assets/images/gromov.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''Я в журнале записи веду, можем там посмотреть.
+[Идет к шкафу, достает толстую книгу в кожаном переплете — журнал освящений. Открывает, показывает]
+Вот, смотрите. «Одиннадцатое июля 1885 года. Освящение трех партий пшеничной и ржаной муки купца Н.А. Бугрова. Свидетель — приказчик П.И. Громов».''',
+      character: 'Отец Серафим',
+      image: 'assets/images/seraphim.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''(смотрит на запись)
+Одиннадцатое июля... А первое письмо об отказе — от пятнадцатого. Четыре дня.''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''Достаточно времени, чтобы подменить образцы и распустить слухи!''',
+      character: 'Громов',
+      image: 'assets/images/gromov.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''(складывает информацию вслух)
+Итак. Одиннадцатого июля после освящения появляется чиновник с мукомольной печатью. Он выясняет, где хранятся образцы. Получает от кого-то мешочек — возможно, с зараженной мукой. В течение следующих дней образцы подменяют на складе. Приезжают проверяющие, находят спорынью, докладывают. Пятнадцатого начинаются отказы.''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''(потрясенно)
+Господи... Неужто такое возможно? Николая Александровича подставить?''',
+      character: 'Отец Серафим',
+      image: 'assets/images/seraphim.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''Возможно. И похоже, что так и было.''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''Значит, на складе кто-то помогал! Смотритель, или кто из складских рабочих!''',
+      character: 'Громов',
+      image: 'assets/images/gromov.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''Нужно проверить. Отец Серафим, вы очень помогли.''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''Рад был послужить правде. Николай Александрович — человек праведный. Сколько бедным помогает, сколько добра делает... Грех его топить.''',
+      character: 'Отец Серафим',
+      image: 'assets/images/seraphim.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '[Саша кланяется, собирается уходить]',
+      isNarration: true,
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''(останавливает)
+Александр Николаевич, погодите.
+[Саша оборачивается]''',
+      character: 'Отец Серафим',
+      image: 'assets/images/seraphim.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''(подходит ближе, смотрит в глаза)
+Вы... не совсем обычный, верно?''',
+      character: 'Отец Серафим',
+      image: 'assets/images/seraphim.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''(удивленно)
+Что вы имеете в виду?''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''(тихо)
+Глаза у вас... будто из другого времени смотрите. Будто видели то, что нам еще видеть предстоит. Я много лет у храма служу, научился людей чувствовать.''',
+      character: 'Отец Серафим',
+      image: 'assets/images/seraphim.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''(не знает, что ответить)
+Я... просто много читал. Учился в столице.''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''(мягко улыбается)
+Может, и так. Но в вас есть что-то... не от мира сего. Это не страшно, Александр Николаевич. Господь иногда посылает помощь неожиданными путями.
+[Крестит Сашу]
+Иди с миром. И помни — правда всегда всплывает, как бы глубоко ее ни прятали. А ложь, даже хитрая, Богу видна.''',
+      character: 'Отец Серафим',
+      image: 'assets/images/seraphim.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''(потрясенно)
+Спасибо, отец.''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    StoryLine(
+      text: '''Ступайте с Богом. Найдите злодея, восстановите справедливость. А я помолюсь за вас.''',
+      character: 'Отец Серафим',
+      image: 'assets/images/seraphim.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral_inside.png',
+    ),
+    // СЦЕНА 11: ВЫХОД ИЗ СОБОРА
+    StoryLine(
+      text: '[Саша и Громов выходят на паперть. Яркое полуденное солнце, шум ярмарки, гул голосов]',
+      isNarration: true,
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral.jpg',
+    ),
+    StoryLine(
+      text: '''(возбужденно)
+Ну что, Александр Николаевич? Теперь все ясно! Чиновник с мукомольной печатью, мешочек, смотритель на складе...''',
+      character: 'Громов',
+      image: 'assets/images/gromov.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral.jpg',
+    ),
+    StoryLine(
+      text: '''(задумчиво)
+Не все. Пока это только версия. Нужны прямые доказательства.''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral.jpg',
+    ),
+    StoryLine(
+      text: '''Так пойдемте на склады! Проверим Семена Палыча, этого смотрителя. Может, он во всем и виноват!''',
+      character: 'Громов',
+      image: 'assets/images/gromov.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral.jpg',
+    ),
+    StoryLine(
+      text: '''Постойте. Громов, вы раньше упоминали какого-то Петра Кротова, мукомола. А смотритель склада — Семен Кротов, верно?''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral.jpg',
+    ),
+    StoryLine(
+      text: '''(хлопает себя по лбу)
+Батюшки! Точно! Семен Палыч — сын Петра Семеновича Кротова! Как я сразу не подумал!''',
+      character: 'Громов',
+      image: 'assets/images/gromov.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral.jpg',
+    ),
+    StoryLine(
+      text: '''Сын мукомола работает смотрителем на складах конкурента?''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral.jpg',
+    ),
+    StoryLine(
+      text: '''Николай Александрович его по доброте взял, года три назад. Петр Семенович просил — говорит, сын у меня работящий, нужна служба. Дядюшка и согласился, не отказал.''',
+      character: 'Громов',
+      image: 'assets/images/gromov.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral.jpg',
+    ),
+    StoryLine(
+      text: '''А что за человек этот Петр Кротов?''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral.jpg',
+    ),
+    StoryLine(
+      text: '''(хмурится)
+Мелкий мукомол. Три мельницы имеет, но маленькие. Давно хочет в крупные торговцы выбиться, но не получается — Николай Александрович его на всех аукционах обгоняет. Завидует, говорят.''',
+      character: 'Громов',
+      image: 'assets/images/gromov.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral.jpg',
+    ),
+    StoryLine(
+      text: '''Мотив есть. Семейное дело — отец хочет разорить Бугрова, сын помогает изнутри.''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral.jpg',
+    ),
+    StoryLine(
+      text: '''(мрачнеет)
+Змеи подколодные... А мы их в дом пустили!''',
+      character: 'Громов',
+      image: 'assets/images/gromov.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral.jpg',
+    ),
+    StoryLine(
+      text: '''Не торопитесь с выводами. Сначала проверим. Идем на склады, поговорим с Семеном Кротовым.''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral.jpg',
+    ),
+    StoryLine(
+      text: '''А если он откажется говорить?''',
+      character: 'Громов',
+      image: 'assets/images/gromov.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral.jpg',
+    ),
+    StoryLine(
+      text: '''(похлопывает по папке с документами)
+У меня есть информация из собора. Я знаю про чиновника, про печать, про мешочек. Если Семен действительно в заговоре — он не выдержит допроса. Люди всегда выдают себя деталями.''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral.jpg',
+    ),
+    StoryLine(
+      text: '''(восхищенно)
+Вы как следователь какой-то! Николай Александрович не зря вас позвал.''',
+      character: 'Громов',
+      image: 'assets/images/gromov.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral.jpg',
+    ),
+    StoryLine(
+      text: '''Пошли. Времени мало — до вечера всего несколько часов.''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral.jpg',
+    ),
+    StoryLine(
+      text: '[Они направляются к Сибирской пристани]',
+      isNarration: true,
+      backgroundImage: 'assets/images/old_fair_spassky_cathedral.jpg',
+    ),
+
+    // ТОЧКА 3: СИБИРСКАЯ ПРИСТАНЬ — ДЕРЕВЯННЫЕ СКЛАДЫ
+    // СЦЕНА 12: ПУТЬ К СКЛАДАМ
+    StoryLine(
+      text: '[Саша и Громов идут от собора к Волге. Впереди виднеется пристань с деревянными складскими строениями]',
+      isNarration: true,
+      backgroundImage: 'assets/images/warehouse.png',
+    ),
+    StoryLine(
+      text: '''Вон Сибирская пристань. Видите суда? Из Перми, из Казани, из Астрахани — со всей Волги товар свозят.''',
+      character: 'Громов',
+      image: 'assets/images/gromov.png',
+      backgroundImage: 'assets/images/warehouse.png',
+    ),
+    StoryLine(
+      text: '''Почему «Сибирская»?''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/warehouse.png',
+    ),
+
+    StoryLine(
+      text: '''Потому что дальше на восток идет — в Пермь, на Урал, в Сибирь. Тут разгружают все, что с востока везут: металл уральский, соль пермскую, меха сибирские. А обратно грузят хлеб, ткани, сахар.''',
+      character: 'Громов',
+      image: 'assets/images/gromov.png',
+      backgroundImage: 'assets/images/siberian_wharf.png',
+    ),
+    StoryLine(
+      text: '''(оглядывается)
+Масштабы впечатляют...''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/siberian_wharf.png',
+    ),
+    StoryLine(
+      text: '''Нижний — карман России! Здесь Восток с Западом встречается. С Волги товар приходит, по железной дороге в Москву и Петербург уходит. Двести миллионов рублей оборот в год — больше, чем у Лейпцигской ярмарки!''',
+      character: 'Громов',
+      image: 'assets/images/gromov.png',
+      backgroundImage: 'assets/images/siberian_wharf.png',
+    ),
+    StoryLine(
+      text: '''Двести миллионов... Астрономическая сумма.''',
+      character: 'Александр Бугров',
+      isMainHero: true,
+      image: 'assets/images/alex2.png',
+      backgroundImage: 'assets/images/siberian_wharf.png',
+    ),
+    StoryLine(
+      text: '[Подходят к деревянным складам. Массивные бревенчатые строения, высокие ворота. У входа — караульная будка]',
+      isNarration: true,
+      backgroundImage: 'assets/images/warehouse_exterior.png',
+    ),
+
 
 
     ],
   ),
+
+// С 9 СЦЕНЫ СМОТРЕТЬ КОММЕНТАРИИ В ДОКУМЕНТЕ И ДОБАВЛЯТЬ КАРТОЧКИ-СПРАВКИ 
+// КАРТУ тоже добавить (может сделать иконку сверху рядом с монетками чтобы в любой момент из истории можно было нажать и смотреть карту)
+// СТРОКА 935
 
   Story(
     id: 'another_story',

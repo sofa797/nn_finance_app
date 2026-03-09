@@ -5,11 +5,40 @@ import 'dart:convert';
 class StoryProgress extends ChangeNotifier {
   final Map<String, int> _progress = {};
   final Set<String> _metCharacters = {};
+  final Map<String, Map<String, String>> _storyChoices = {};
+
+
+  int getIndex(String storyId) => _progress[storyId] ?? 0; 
+
+
+  void setChoice(String storyId, String sceneId, String choiceId) {
+    _storyChoices.putIfAbsent(storyId, () => {});
+    _storyChoices[storyId]![sceneId] = choiceId;
+    _saveToPrefs();
+    notifyListeners();
+  }
+
+  String? getChoice(String storyId, String sceneId) {
+    return _storyChoices[storyId]?[sceneId];
+  }
+
+  void resetChoices(String storyId) {
+    _storyChoices.remove(storyId);
+    _saveToPrefs();
+    notifyListeners();
+  }
+
+  void setIndex(String storyId, int index) {
+    _progress[storyId] = index;
+    _saveToPrefs();
+    notifyListeners();
+  }
+
 
   final Map<String, int> _goldEarned = {};
   final Map<String, int> _silverEarned = {};
 
-  int getIndex(String storyId) => _progress[storyId] ?? 0;
+
 
   void next(String storyId, int length) {
     if (_progress[storyId] == null) _progress[storyId] = 0;
@@ -61,6 +90,7 @@ class StoryProgress extends ChangeNotifier {
       'metCharacters': _metCharacters.toList(),
       'goldEarned': _goldEarned,
       'silverEarned': _silverEarned,
+      'storyChoices': _storyChoices,
     };
     await prefs.setString('story_progress', jsonEncode(data));
   }

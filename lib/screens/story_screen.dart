@@ -8,6 +8,9 @@ import '../settings/story_progress.dart';
 import '../settings/app_settings.dart';
 import '../models/story_model.dart';
 import 'map_screen.dart';
+import 'choice_screen.dart';
+import '../settings/story_progress.dart';
+
 
 class StoryScreen extends StatefulWidget {
   final Story story;
@@ -130,6 +133,71 @@ class _StoryScreenState extends State<StoryScreen> {
     } else {
       await _tts.stop();
       _isSpeaking = false;
+    }
+  }
+
+  void _showChoiceDialog(StoryLine line) async {
+    
+    
+    if (line.choices == null || line.choices!.isEmpty) {
+      return;
+    }
+
+    
+    final result = await showDialog<String>(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => AlertDialog(
+        title: Text(
+          'Сделайте выбор',
+          style: TextStyle(
+            fontSize: 20 * context.watch<AppSettings>().textScale,
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: line.choices!.map((choice) {
+            
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: ElevatedButton(
+                onPressed: () {
+                  
+                  context.read<StoryProgress>().setChoice(
+                    widget.story.id, 
+                    line.sceneId!, 
+                    choice.targetSceneId
+                  );
+                  Navigator.pop(ctx, choice.targetSceneId);
+                },
+                child: Text(choice.text),
+              ),
+            );
+          }).toList(),
+        ),
+      ),
+    );
+
+
+
+    if (result != null) {
+      final lines = widget.story.lines;
+      int targetIndex = lines.indexWhere((s) => s.sceneId == result);
+
+      
+      if (targetIndex != -1) {
+
+        context.read<StoryProgress>().setIndex(widget.story.id, targetIndex);
+        if (_isAudioMode) {
+          await _speakLine(lines[targetIndex]);
+        }
+        setState(() {}); 
+      } else {
+
+        if (_isAudioMode) {
+          _playNextLine();
+        }
+      }
     }
   }
 
@@ -347,6 +415,16 @@ class _StoryScreenState extends State<StoryScreen> {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () async {
+
+  
+        if (current.choices != null && current.choices!.isNotEmpty) {
+
+          _showChoiceDialog(current);
+          return;
+        }
+
+
+
         if (!_isAudioMode) {
           await _tts.stop();
           if (!mounted) return;

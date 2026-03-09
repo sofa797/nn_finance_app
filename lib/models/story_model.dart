@@ -1,3 +1,18 @@
+class Choice {
+  final String text;
+  final String description;
+  final String targetSceneId;
+  final Map<String, dynamic>? consequences;
+
+  const Choice({
+    required this.text,
+    required this.description,
+    required this.targetSceneId,
+    this.consequences,
+  });
+}
+
+
 class Story {
   final String id;
   final String title;
@@ -35,6 +50,10 @@ class StoryLine {
   final String? infoDescription;
   final String? infoImage;
 
+  final List<Choice>? choices;
+  final String? sceneId;
+
+
   StoryLine({
     required this.text,
     this.character,
@@ -47,6 +66,9 @@ class StoryLine {
     this.infoTitle,
     this.infoDescription,
     this.infoImage,
+    this.choices,
+    this.sceneId,
+
   });
 }
 
