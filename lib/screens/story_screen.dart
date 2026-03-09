@@ -169,7 +169,9 @@ class _StoryScreenState extends State<StoryScreen> {
           children: [
             PageView(
               controller: _pageController,
-              physics: const NeverScrollableScrollPhysics(),
+              physics: _isOnMapPage
+                ? const NeverScrollableScrollPhysics()
+                : const PageScrollPhysics(),
               onPageChanged: (index) {
                 setState(() => _isOnMapPage = index == 1);
               },
